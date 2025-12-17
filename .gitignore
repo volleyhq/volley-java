@@ -25,6 +25,10 @@ buildNumber.properties
 .mvn/timing.properties
 .mvn/wrapper/maven-wrapper.jar
 
+# Release artifacts (keep source, but ignore built JARs in repo)
+*.jar
+!target/*.jar
+
 # IDE
 .idea/
 *.iml
