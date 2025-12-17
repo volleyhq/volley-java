@@ -18,7 +18,7 @@ class IntegrationTest {
     @Test
     void testListOrganizations() throws VolleyException {
         String apiToken = System.getenv("VOLLEY_API_TOKEN");
-        VolleyClient client = VolleyClient.create(apiToken);
+        VolleyClient client = VolleyClient.create(apiToken).build();
 
         List<Organization> orgs = client.organizations.list();
         assertNotNull(orgs);
@@ -28,7 +28,7 @@ class IntegrationTest {
     @Test
     void testGetOrganization() throws VolleyException {
         String apiToken = System.getenv("VOLLEY_API_TOKEN");
-        VolleyClient client = VolleyClient.create(apiToken);
+        VolleyClient client = VolleyClient.create(apiToken).build();
 
         List<Organization> orgs = client.organizations.list();
         if (orgs == null || orgs.isEmpty()) {
@@ -43,7 +43,7 @@ class IntegrationTest {
     @Test
     void testListProjects() throws VolleyException {
         String apiToken = System.getenv("VOLLEY_API_TOKEN");
-        VolleyClient client = VolleyClient.create(apiToken);
+        VolleyClient client = VolleyClient.create(apiToken).build();
 
         List<Organization> orgs = client.organizations.list();
         if (orgs == null || orgs.isEmpty()) {
@@ -59,7 +59,7 @@ class IntegrationTest {
     @Test
     void testListSources() throws VolleyException {
         String apiToken = System.getenv("VOLLEY_API_TOKEN");
-        VolleyClient client = VolleyClient.create(apiToken);
+        VolleyClient client = VolleyClient.create(apiToken).build();
 
         List<Organization> orgs = client.organizations.list();
         if (orgs == null || orgs.isEmpty()) {

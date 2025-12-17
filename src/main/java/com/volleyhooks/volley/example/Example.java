@@ -20,7 +20,7 @@ public class Example {
         }
 
         // Create a client
-        VolleyClient client = VolleyClient.create(apiToken);
+        VolleyClient client = VolleyClient.create(apiToken).build();
 
         try {
             // Example 1: List organizations
