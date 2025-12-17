@@ -1,0 +1,110 @@
+package com.volleyhooks.volley;
+
+import com.volleyhooks.volley.models.*;
+import okhttp3.Request;
+
+import java.time.Instant;
+import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
+import java.util.Map;
+
+/**
+ * Delivery Attempts API methods.
+ */
+public class DeliveryAttempts {
+    private final VolleyClient client;
+    private static final DateTimeFormatter ISO_FORMATTER = DateTimeFormatter.ISO_INSTANT;
+
+    DeliveryAttempts(VolleyClient client) {
+        this.client = client;
+    }
+
+    /**
+     * Options for listing delivery attempts.
+     */
+    public static class ListOptions {
+        private String eventId;
+        private Long sourceId;
+        private Long destinationId;
+        private Long connectionId;
+        private String status;
+        private Instant startTime;
+        private Instant endTime;
+        private String sort;
+        private Integer limit;
+        private Integer offset;
+
+        public String getEventId() { return eventId; }
+        public void setEventId(String eventId) { this.eventId = eventId; }
+
+        public Long getSourceId() { return sourceId; }
+        public void setSourceId(Long sourceId) { this.sourceId = sourceId; }
+
+        public Long getDestinationId() { return destinationId; }
+        public void setDestinationId(Long destinationId) { this.destinationId = destinationId; }
+
+        public Long getConnectionId() { return connectionId; }
+        public void setConnectionId(Long connectionId) { this.connectionId = connectionId; }
+
+        public String getStatus() { return status; }
+        public void setStatus(String status) { this.status = status; }
+
+        public Instant getStartTime() { return startTime; }
+        public void setStartTime(Instant startTime) { this.startTime = startTime; }
+
+        public Instant getEndTime() { return endTime; }
+        public void setEndTime(Instant endTime) { this.endTime = endTime; }
+
+        public String getSort() { return sort; }
+        public void setSort(String sort) { this.sort = sort; }
+
+        public Integer getLimit() { return limit; }
+        public void setLimit(Integer limit) { this.limit = limit; }
+
+        public Integer getOffset() { return offset; }
+        public void setOffset(Integer offset) { this.offset = offset; }
+    }
+
+    /**
+     * Lists all delivery attempts for a project with optional filters.
+     */
+    public ListDeliveryAttemptsResponse list(Long projectId, ListOptions options) throws VolleyException {
+        Map<String, String> queryParams = new HashMap<>();
+        if (options != null) {
+            if (options.getEventId() != null) {
+                queryParams.put("event_id", options.getEventId());
+            }
+            if (options.getSourceId() != null) {
+                queryParams.put("source_id", String.valueOf(options.getSourceId()));
+            }
+            if (options.getDestinationId() != null) {
+                queryParams.put("destination_id", String.valueOf(options.getDestinationId()));
+            }
+            if (options.getConnectionId() != null) {
+                queryParams.put("connection_id", String.valueOf(options.getConnectionId()));
+            }
+            if (options.getStatus() != null) {
+                queryParams.put("status", options.getStatus());
+            }
+            if (options.getStartTime() != null) {
+                queryParams.put("start_time", ISO_FORMATTER.format(options.getStartTime()));
+            }
+            if (options.getEndTime() != null) {
+                queryParams.put("end_time", ISO_FORMATTER.format(options.getEndTime()));
+            }
+            if (options.getSort() != null) {
+                queryParams.put("sort", options.getSort());
+            }
+            if (options.getLimit() != null) {
+                queryParams.put("limit", String.valueOf(options.getLimit()));
+            }
+            if (options.getOffset() != null) {
+                queryParams.put("offset", String.valueOf(options.getOffset()));
+            }
+        }
+
+        Request request = client.buildRequestWithQuery("GET", "/api/projects/" + projectId + "/delivery-attempts", queryParams).build();
+        return client.executeRequest(request, ListDeliveryAttemptsResponse.class);
+    }
+}
+
