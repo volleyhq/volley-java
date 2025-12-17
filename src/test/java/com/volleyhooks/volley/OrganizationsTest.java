@@ -26,7 +26,7 @@ class OrganizationsTest {
         client = VolleyClient.create("test-token")
                 .baseUrl(mockWebServer.url("/").toString().replaceAll("/$", ""))
                 .build();
-        gson = new Gson();
+        gson = client.getGson();
     }
 
     @AfterEach

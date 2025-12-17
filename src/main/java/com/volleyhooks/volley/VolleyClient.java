@@ -2,6 +2,11 @@ package com.volleyhooks.volley;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.TypeAdapter;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
+import java.io.IOException;
+import java.time.Instant;
 import okhttp3.*;
 import java.io.IOException;
 import java.util.HashMap;
@@ -21,6 +26,16 @@ public class VolleyClient {
     private final OkHttpClient httpClient;
     private final Gson gson;
 
+    // API resource clients
+    public final Organizations organizations;
+    public final Projects projects;
+    public final Sources sources;
+    public final Destinations destinations;
+    public final Connections connections;
+    public final Events events;
+    public final DeliveryAttempts deliveryAttempts;
+    public final Webhooks webhooks;
+
     private VolleyClient(Builder builder) {
         this.baseUrl = builder.baseUrl;
         this.apiToken = builder.apiToken;
@@ -31,7 +46,7 @@ public class VolleyClient {
                 .writeTimeout(DEFAULT_TIMEOUT_SECONDS, TimeUnit.SECONDS)
                 .build();
         this.gson = new GsonBuilder()
-                .setDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
+                .registerTypeAdapter(Instant.class, new InstantTypeAdapter())
                 .create();
 
         // Initialize API resource clients
@@ -49,10 +64,10 @@ public class VolleyClient {
      * Creates a new VolleyClient with the specified API token.
      *
      * @param apiToken Your Volley API token
-     * @return A new VolleyClient instance
+     * @return A Builder instance for configuring the client
      */
-    public static VolleyClient create(String apiToken) {
-        return new Builder(apiToken).build();
+    public static Builder create(String apiToken) {
+        return new Builder(apiToken);
     }
 
     /**
@@ -269,6 +284,29 @@ public class VolleyClient {
 
         public String getMessage() {
             return message;
+        }
+    }
+
+    /**
+     * Type adapter for java.time.Instant.
+     */
+    private static class InstantTypeAdapter extends TypeAdapter<Instant> {
+        @Override
+        public void write(JsonWriter out, Instant value) throws IOException {
+            if (value == null) {
+                out.nullValue();
+            } else {
+                out.value(value.toString());
+            }
+        }
+
+        @Override
+        public Instant read(JsonReader in) throws IOException {
+            if (in.peek() == com.google.gson.stream.JsonToken.NULL) {
+                in.nextNull();
+                return null;
+            }
+            return Instant.parse(in.nextString());
         }
     }
 }

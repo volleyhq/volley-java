@@ -27,7 +27,7 @@ class ProjectsTest {
                 .baseUrl(mockWebServer.url("/").toString().replaceAll("/$", ""))
                 .organizationId(123L)
                 .build();
-        gson = new Gson();
+        gson = client.getGson();
     }
 
     @AfterEach

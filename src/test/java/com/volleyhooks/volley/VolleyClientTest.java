@@ -31,7 +31,7 @@ class VolleyClientTest {
 
     @Test
     void testCreateClient() {
-        VolleyClient client = VolleyClient.create("test-token");
+        VolleyClient client = VolleyClient.create("test-token").build();
         assertNotNull(client);
     }
 
